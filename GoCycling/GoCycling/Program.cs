@@ -1,4 +1,7 @@
+using GoCycling.Queries;
+
 var builder = WebApplication.CreateBuilder(args);
+GoCycleDbContext.connString = builder.Configuration["DatabaseConnString"];
 
 // Add services to the container.
 
