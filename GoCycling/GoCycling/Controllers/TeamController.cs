@@ -1,3 +1,4 @@
+using GoCycling.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GoCycling.Controllers
@@ -15,9 +16,10 @@ namespace GoCycling.Controllers
         }
 
         [HttpGet]
-        public int[] GetAllTeams()
+        public int GetAllTeams()
         {
-            return Enumerable.Range(1, 5).ToArray();
+            using GoCycleDbContext dbContext = new GoCycleDbContext();
+            return TileQueries.TestCreate(dbContext);
         }
     }
 }
