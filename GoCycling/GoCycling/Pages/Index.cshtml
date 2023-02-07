@@ -1,12 +1,18 @@
-﻿@page
+﻿@page "{code?}"
 @model GoCycling.Pages.IndexModel
 @{
 }
 
 
+<script>
+	if ("@Model.hasCode" === "False") {
+		window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://gocycling.azurewebsites.net&response_type=code&scope=activity:read_all");
+	}
+</script>
+
 <head>
 	<meta charset="utf-8">
-	<title>Display a map on a webpage</title>
+	<title>GoCycling</title>
 	<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 	<link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet">
 	<script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>

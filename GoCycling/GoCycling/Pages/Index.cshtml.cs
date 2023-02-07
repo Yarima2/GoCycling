@@ -5,8 +5,13 @@ namespace GoCycling.Pages
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
-        {
-        }
-    }
+		public bool hasCode { get; set; }
+		public string code { get; set; }
+		public void OnGet(string code)
+		{
+			hasCode = code != null;
+			Console.WriteLine(code);
+			this.code = code;
+		}
+	}
 }
