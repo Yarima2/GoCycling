@@ -1,12 +1,15 @@
+using GoCycling;
 using GoCycling.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 GoCycleDbContext.connString = builder.Configuration.GetConnectionString("DatabaseConnString");
+StravaTokenHandler.clientId = builder.Configuration.GetConnectionString("StravaClientId");
+StravaTokenHandler.clientSecret = builder.Configuration.GetConnectionString("StravaClientSecret");
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddRazorPages();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,5 +30,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
+
 
 app.Run();
