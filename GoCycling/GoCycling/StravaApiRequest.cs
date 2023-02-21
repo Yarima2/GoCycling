@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Net.Http.Headers;
 using System.Text.Json.Serialization;
+using System.Web;
 
 namespace GoCycling
 {
@@ -17,19 +18,26 @@ namespace GoCycling
 			this.tokenHandler = tokenHandler;
 		}
 
-		public async Task<HttpResponseMessage> SendRequest(HttpMethod method, string endpoint, Dictionary<string, string>? parameters = null)
+		public async Task<T> SendRequest<T>(HttpMethod method, string endpoint, Dictionary<string, string>? parameters = null)
 		{
 			if(parameters == null)
 			{
 				parameters = new Dictionary<string, string> ();
 			}
 			parameters.Add("access_token", await tokenHandler.GetToken());
-			HttpRequestMessage request = new(method, "https://www.strava.com/api/v3/" + endpoint);
-			request.Content = new FormUrlEncodedContent(parameters);
+
+			var query = HttpUtility.ParseQueryString(string.Empty);
+			foreach (string key in parameters.Keys)
+			{
+				query[key] = parameters[key];
+			}
+
+			HttpRequestMessage request = new(method, "http://www.strava.com/api/v3/" + endpoint + "?" + query.ToString());
 			HttpResponseMessage response = await client.SendAsync(request);
 			if (response.IsSuccessStatusCode && response.Content != null)
 			{
-				return response;
+				string responseContent = await response.Content.ReadAsStringAsync();
+				return JsonConvert.DeserializeObject<T>(responseContent);
 			}
 			throw new Exception("failed get request: " + endpoint + "   http code: "+ response.StatusCode);
 		}
@@ -46,12 +54,12 @@ namespace GoCycling
 
 		public StravaTokenHandler(string jsonToken)
 		{ 
-			token = JsonConvert.DeserializeObject<StravaToken>(jsonToken, new DateTimeJsonConverter(), new TimeSpanJsonConverter());
+			token = JsonConvert.DeserializeObject<StravaToken>(jsonToken);
 		}
 
 		public async Task<string> GetToken()
 		{
-			if(token.expires_at < (DateTime.Now + new TimeSpan(0, 0, 10)))
+			if(token.expires_at < (DateTime.Now + new TimeSpan(0, 0, 10)).Ticks)
 			{
 				var parameters = new Dictionary<string, string>();
 				parameters.Add("client_id", clientId);
@@ -62,7 +70,9 @@ namespace GoCycling
 				HttpResponseMessage response = await client.PostAsync("https://www.strava.com/oauth/token", encodedParams);
 				if(response.IsSuccessStatusCode && response.Content != null)
 				{
-					return await response.Content.ReadAsStringAsync();
+					string jsonToken = await response.Content.ReadAsStringAsync();
+					token = JsonConvert.DeserializeObject<StravaToken>(jsonToken);
+					return token.access_token;
 				}
 				throw new Exception("failed to refresh token: " + response.StatusCode);
 			}
@@ -99,10 +109,10 @@ namespace GoCycling
 
 		public string token_type { get; set; } = null!;
 		public string access_token { get; set; } = null!;
-		public DateTime expires_at { get; set; }
-		public TimeSpan expires_in { get; set; }
+		public long expires_at { get; set; }
+		public int expires_in { get; set; }
 		public string refresh_token { get; set; } = null!;
-		public Athlete athlete { get; set; } = null!;
+		public Athlete? athlete { get; set; } = null;
 
 	}
 }
