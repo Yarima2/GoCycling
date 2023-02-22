@@ -9,7 +9,12 @@ StravaTokenHandler.clientSecret = builder.Configuration.GetConnectionString("Str
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+	options.Conventions.AuthorizePage("/");
+    options.Conventions.AuthorizePage("/Index");
+    options.Conventions.AllowAnonymousToFolder("/Login");
+});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options =>
@@ -17,6 +22,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 		options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
 		options.SlidingExpiration = true;
 		options.AccessDeniedPath = "/Forbidden/";
+		options.LoginPath = "/Login";
 	});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

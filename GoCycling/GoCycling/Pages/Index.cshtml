@@ -5,15 +5,7 @@
 <link rel="icon" href="@Url.Content("~/content/favicon.ico")" />
 
 <script>
-	console.log(@Model.apiString)
-	if ("@Model.hasCode" === "False") {
-		if("@Model.hostedLocally" === "True"){
-			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://localhost:7070&response_type=code&scope=activity:read_all");
-		}
-		else{
-			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://gocycling.azurewebsites.net&response_type=code&scope=activity:read_all");
-		}
-	}
+
 </script>
 
 

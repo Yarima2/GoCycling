@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace GoCycling.Controllers
 {
@@ -66,7 +67,7 @@ namespace GoCycling.Controllers
 					new ClaimsPrincipal(claimsIdentity),
 					new AuthenticationProperties());
 
-				return LocalRedirect("/");
+				return Ok();
 			}
 			catch (Exception ex)
 			{

@@ -59,7 +59,9 @@ namespace GoCycling
 
 		public async Task<string> GetToken()
 		{
-			if(token.expires_at < (DateTime.Now + new TimeSpan(0, 0, 10)).Ticks)
+			DateTime expirationBuffer = DateTime.Now + new TimeSpan(0, 0, 10);
+			long expirationBufferUnix = ((DateTimeOffset)expirationBuffer).ToUnixTimeSeconds();
+            if (token.expires_at < expirationBufferUnix)
 			{
 				var parameters = new Dictionary<string, string>();
 				parameters.Add("client_id", clientId);

@@ -1,0 +1,30 @@
+﻿@page
+@model GoCycling.Pages.LoginModel
+@{
+}
+
+<script>
+    if ("@Model.hasCode" === "False") {
+        if("@Model.hostedLocally" === "True"){
+			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://localhost:7070/login&response_type=code&scope=activity:read_all");
+		}
+		else{
+			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://gocycling.azurewebsites.net/login&response_type=code&scope=activity:read_all");
+		}
+    }
+	else{
+		fetch('/login?authCode=@Model.code', {
+            method: 'POST',
+            headers: {},
+            credentials: 'same-origin',
+        })
+		.then((response) => {
+			if("@Model.hostedLocally" === "True"){
+				window.location.replace("https://localhost:7070/");
+			}
+			else{
+				window.location.replace("https://gocycling.azurewebsites.net/");
+			}
+		})
+	}
+</script>
