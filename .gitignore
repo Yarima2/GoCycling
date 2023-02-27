@@ -83,3 +83,4 @@ _[Ss]cripts
 *.pubxml
 profile.arm.json
 GoCycling/.vs
+*.db
