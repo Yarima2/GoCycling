@@ -16,15 +16,13 @@ namespace GoCycling.Queries
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //check if code is running locally and not on azure. azure always sets this env variable
-            if (String.IsNullOrEmpty(Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME")))
-            {
-                optionsBuilder.UseSqlite("Data Source=Database.db");
-            }
-            else
-            {
-                optionsBuilder.UseSqlServer(connString);
-            }
+			//check if code is running locally and not on azure. azure always sets this env variable
+#if DEBUG
+			optionsBuilder.UseSqlite("Data Source=Database.db");
+#else
+            optionsBuilder.UseSqlServer(connString);
+#endif
+
         }
     }
 }
