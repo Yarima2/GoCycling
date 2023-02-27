@@ -19,7 +19,7 @@ namespace GoCycling.Controllers
         public int GetAllTeams()
         {
             using GoCycleDbContext dbContext = new GoCycleDbContext();
-            return TileQueries.TestCreate(dbContext);
+            return 1;
         }
     }
 }

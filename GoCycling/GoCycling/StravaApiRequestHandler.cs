@@ -7,15 +7,21 @@ using System.Web;
 
 namespace GoCycling
 {
-	public class StravaApiRequest
+	public class StravaApiRequestHandler
 	{
 
 		public StravaTokenHandler tokenHandler;
 		HttpClient client = new ();
 
-		public StravaApiRequest(StravaTokenHandler tokenHandler)
+		public StravaApiRequestHandler(StravaTokenHandler tokenHandler)
 		{
 			this.tokenHandler = tokenHandler;
+		}
+
+		public static async Task<StravaApiRequestHandler> FromAuthCode(string authCode)
+		{
+			var tokenHandler = await StravaTokenHandler.FromAuthCode(authCode);
+			return new StravaApiRequestHandler(tokenHandler);
 		}
 
 		public async Task<T> SendRequest<T>(HttpMethod method, string endpoint, Dictionary<string, string>? parameters = null)
@@ -86,12 +92,14 @@ namespace GoCycling
 
 		public static async Task<StravaTokenHandler> FromAuthCode(string authCode)
 		{
-			var parameters = new Dictionary<string, string>();
-			parameters.Add("User-Agent", "GoCycling-HttpServer");
-			parameters.Add("client_id", clientId);
-			parameters.Add("client_secret", clientSecret);
-			parameters.Add("grant_type", "authorization_code");
-			parameters.Add("code", authCode);
+			var parameters = new Dictionary<string, string>
+			{
+				{ "User-Agent", "GoCycling-HttpServer" },
+				{ "client_id", clientId },
+				{ "client_secret", clientSecret },
+				{ "grant_type", "authorization_code" },
+				{ "code", authCode }
+			};
 			var encodedParams = new FormUrlEncodedContent(parameters);
 			HttpResponseMessage response = await client.PostAsync("https://www.strava.com/oauth/token", encodedParams);
 			if (response.IsSuccessStatusCode && response.Content != null)

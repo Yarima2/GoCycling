@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace GoCycling.Model
+namespace GoCycling.Models
 {
     public class Tile
     {

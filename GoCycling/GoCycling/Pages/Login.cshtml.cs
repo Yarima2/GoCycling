@@ -1,6 +1,11 @@
+using GoCycling.Models;
+using GoCycling.Queries;
+using GoCycling.StravaApiRequests;
+using GoCycling.StravaModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
+using System.Collections.Generic;
 
 namespace GoCycling.Pages
 {

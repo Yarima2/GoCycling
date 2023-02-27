@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
+using GoCycling.Models;
+using GoCycling.StravaApiRequests;
 
 namespace GoCycling.Controllers
 {
@@ -25,8 +27,7 @@ namespace GoCycling.Controllers
         {
 			try
 			{
-				var tokenHandler = await StravaTokenHandler.FromAuthCode(authCode);
-				StravaApiRequest request = new StravaApiRequest(tokenHandler);
+				StravaApiRequestHandler request = await StravaApiRequestHandler.FromAuthCode(authCode);
 				var athlete = await request.SendRequest<Athlete>(HttpMethod.Get, "athlete");
 
 				var claims = new List<Claim>
@@ -66,6 +67,26 @@ namespace GoCycling.Controllers
 					CookieAuthenticationDefaults.AuthenticationScheme,
 					new ClaimsPrincipal(claimsIdentity),
 					new AuthenticationProperties());
+
+
+
+				using GoCycleDbContext dbContext = new GoCycleDbContext();
+
+				User? user = UserQueries.GetUser(dbContext, athlete.id);
+
+				if (user == null)
+				{
+
+					List<Team> teams = TeamQueries.GetAllTeams(dbContext);
+					user = new User
+					{
+						Id = athlete.id,
+						Team = teams[(int)(new Random().NextDouble() * teams.Count())],
+					};
+					dbContext.Users.Add(user);
+					dbContext.SaveChanges();
+				}
+
 
 				return Ok();
 			}
