@@ -9,7 +9,17 @@ namespace GoCycling.Pages
 
 		public async void OnGet(string code)
 		{
+			var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
 
-        }
+			if (claimsIdentity != null)
+			{
+				var c = claimsIdentity.FindFirst("Id");
+
+				if (c != null)
+				{
+					string test = c.Value;
+				}
+			}
+		}
 	}
 }

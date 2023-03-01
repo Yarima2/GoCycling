@@ -56,37 +56,37 @@ namespace GoCycling
 
 		static HttpClient client = new();
 
-		StravaToken token;
+		public StravaToken Token { get; private set; }
 
 		public StravaTokenHandler(string jsonToken)
 		{ 
-			token = JsonConvert.DeserializeObject<StravaToken>(jsonToken);
+			Token = JsonConvert.DeserializeObject<StravaToken>(jsonToken);
 		}
 
 		public async Task<string> GetToken()
 		{
 			DateTime expirationBuffer = DateTime.Now + new TimeSpan(0, 0, 10);
 			long expirationBufferUnix = ((DateTimeOffset)expirationBuffer).ToUnixTimeSeconds();
-            if (token.expires_at < expirationBufferUnix)
+            if (Token.expires_at < expirationBufferUnix)
 			{
 				var parameters = new Dictionary<string, string>();
 				parameters.Add("client_id", clientId);
 				parameters.Add("client_secret", clientSecret);
 				parameters.Add("grant_type", "refresh_token");
-				parameters.Add("refresh_token", token.refresh_token);
+				parameters.Add("refresh_token", Token.refresh_token);
 				var encodedParams = new FormUrlEncodedContent(parameters);
 				HttpResponseMessage response = await client.PostAsync("https://www.strava.com/oauth/token", encodedParams);
 				if(response.IsSuccessStatusCode && response.Content != null)
 				{
 					string jsonToken = await response.Content.ReadAsStringAsync();
-					token = JsonConvert.DeserializeObject<StravaToken>(jsonToken);
-					return token.access_token;
+					Token = JsonConvert.DeserializeObject<StravaToken>(jsonToken);
+					return Token.access_token;
 				}
 				throw new Exception("failed to refresh token: " + response.StatusCode);
 			}
 			else
 			{
-				return token.access_token;
+				return Token.access_token;
 			}
 		}
 

@@ -76,13 +76,24 @@ namespace GoCycling.Controllers
 
 				if (user == null)
 				{
+					StravaToken token = request.tokenHandler.Token;
+
+					var userToken = new UserToken
+					{
+						access_token= token.access_token,
+						expires_at=token.expires_at,
+						refresh_token=token.refresh_token,
+						token_type = token.token_type
+					};
 
 					List<Team> teams = TeamQueries.GetAllTeams(dbContext);
 					user = new User
 					{
 						Id = athlete.id,
 						Team = teams[(int)(new Random().NextDouble() * teams.Count())],
+						Token = userToken,
 					};
+					dbContext.UserTokens.Add(userToken);
 					dbContext.Users.Add(user);
 					dbContext.SaveChanges();
 				}

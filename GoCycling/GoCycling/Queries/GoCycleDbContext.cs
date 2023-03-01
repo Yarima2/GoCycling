@@ -7,6 +7,7 @@ namespace GoCycling.Queries
     {
         public DbSet<Team> Teams { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserToken> UserTokens { get; set; }
         public DbSet<Tile> Tiles { get; set; }
         public DbSet<TileConquer> TileConquers { get; set; }
 
