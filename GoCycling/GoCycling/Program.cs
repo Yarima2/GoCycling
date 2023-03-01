@@ -1,4 +1,5 @@
 using GoCycling;
+using GoCycling.Controllers;
 using GoCycling.Queries;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -6,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 GoCycleDbContext.connString = builder.Configuration.GetConnectionString("DatabaseConnString");
 StravaTokenHandler.clientId = builder.Configuration.GetConnectionString("StravaClientId");
 StravaTokenHandler.clientSecret = builder.Configuration.GetConnectionString("StravaClientSecret");
+StravaWebhookController.verifyToken = builder.Configuration.GetConnectionString("StravaWebhookVerifyToken");
 
 // Add services to the container.
 builder.Services.AddControllers();
