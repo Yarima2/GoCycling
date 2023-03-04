@@ -1,4 +1,5 @@
-﻿using GoCycling.StravaModels;
+﻿using GoCycling.Models;
+using GoCycling.StravaModels;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http.Headers;
@@ -61,6 +62,19 @@ namespace GoCycling
 		public StravaTokenHandler(string jsonToken)
 		{ 
 			Token = JsonConvert.DeserializeObject<StravaToken>(jsonToken);
+		}
+
+		public StravaTokenHandler(UserToken token)
+		{
+			Token = new StravaToken()
+			{
+				access_token = token.access_token,
+				expires_at = token.expires_at,
+				expires_in = -1,
+				refresh_token = token.refresh_token,
+				token_type = token.token_type,
+				athlete = null,
+			};
 		}
 
 		public async Task<string> GetToken()
