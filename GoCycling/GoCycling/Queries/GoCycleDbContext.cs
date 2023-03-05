@@ -19,11 +19,13 @@ namespace GoCycling.Queries
         {
 			//check if code is running locally and not on azure. azure always sets this env variable
 #if DEBUG
-			optionsBuilder.UseSqlite("Data Source=Database.db");
+			optionsBuilder.UseLazyLoadingProxies()
+                          .UseSqlite("Data Source=Database.db");
 #else
-            optionsBuilder.UseSqlServer(connString);
+            optionsBuilder.UseLazyLoadingProxies()
+                          .UseSqlServer(connString);
 #endif
 
-        }
-    }
+		}
+	}
 }

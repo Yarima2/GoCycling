@@ -1,6 +1,7 @@
 ﻿using GoCycling.Models;
 using GoCycling.Queries;
 using GoCycling.StravaApiRequests;
+using GoCycling.StravaModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -41,7 +42,7 @@ namespace GoCycling.Controllers
 
 
 		[Microsoft.AspNetCore.Mvc.HttpPost]
-		public ActionResult Webhook([FromBody] WebhookData data)
+		public async Task<ActionResult> Webhook([FromBody] WebhookData data)
 		{
 			if(data.aspect_type == "create" && data.object_type == "activity")
 			{
@@ -54,7 +55,7 @@ namespace GoCycling.Controllers
 				UserToken token = UserQueries.GetToken(dbContext, userId);
 				var requestHandler = new StravaApiRequestHandler(new StravaTokenHandler(token));
 
-				ActivityRequests.GetActivity(requestHandler, activityId);
+				Activity a = await ActivityRequests.GetActivity(requestHandler, activityId);
 			}
 			return new OkResult();
 		}

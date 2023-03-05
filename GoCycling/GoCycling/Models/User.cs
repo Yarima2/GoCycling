@@ -4,8 +4,8 @@
 	{
 
 		public int Id { get; set; }
-		public Team Team { get; set; } = null!;
-		public UserToken Token { get; set; } = null!;
+		public virtual Team Team { get; set; } = null!;
+		public virtual UserToken Token { get; set; } = null!;
 
 
 	}
