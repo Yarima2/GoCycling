@@ -63,11 +63,6 @@ namespace GoCycling.Controllers
 					// redirect response value.
 				};
 
-				await HttpContext.SignInAsync(
-					CookieAuthenticationDefaults.AuthenticationScheme,
-					new ClaimsPrincipal(claimsIdentity),
-					new AuthenticationProperties());
-
 
 
 				using GoCycleDbContext dbContext = new GoCycleDbContext();
@@ -99,10 +94,16 @@ namespace GoCycling.Controllers
 				}
 
 
+				await HttpContext.SignInAsync(
+					CookieAuthenticationDefaults.AuthenticationScheme,
+					new ClaimsPrincipal(claimsIdentity),
+					new AuthenticationProperties());
+
 				return Ok();
 			}
 			catch (Exception ex)
 			{
+				_logger.LogError(ex, "login failed");
 				return Unauthorized();
 			}
 		}

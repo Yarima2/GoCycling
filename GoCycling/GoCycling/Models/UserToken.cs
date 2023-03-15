@@ -1,4 +1,6 @@
-﻿namespace GoCycling.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace GoCycling.Models
 {
 	public class UserToken
 	{

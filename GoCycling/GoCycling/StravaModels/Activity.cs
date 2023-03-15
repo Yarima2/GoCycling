@@ -2,7 +2,8 @@
 {
 	public class Activity
 	{
-
+		public long Id { get; set; }
+		public string name { get; set; }
 		public Map map { get; set; } = null!;
 	}
 

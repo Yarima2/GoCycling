@@ -56,6 +56,9 @@ namespace GoCycling.Controllers
 				var requestHandler = new StravaApiRequestHandler(new StravaTokenHandler(token));
 
 				Activity a = await ActivityRequests.GetActivity(requestHandler, activityId);
+
+				List<Tuple<double, double>> polyline = PolylineDecoder.Decode(a.map.polyline);
+				_logger.LogInformation("activity name: " + a.name);
 			}
 			return new OkResult();
 		}

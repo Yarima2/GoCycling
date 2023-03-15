@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GoCycling.Models
 {
     public class Tile
     {
-        public int Id { get; set; }
+		public int Id { get; set; }
 
         public int X { get; set; }
         public int Y { get; set; }
