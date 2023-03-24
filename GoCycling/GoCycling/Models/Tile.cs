@@ -6,9 +6,9 @@ namespace GoCycling.Models
 {
     public class Tile
     {
-		public int Id { get; set; }
-
+        [Key]
         public int X { get; set; }
+        [Key]
         public int Y { get; set; }
 
         public virtual ICollection<TileConquer> Conquers { get; set; } = null!;

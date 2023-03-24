@@ -50,14 +50,14 @@ namespace GoCycling.Controllers
 				int userId = data.owner_id;
 				long activityId = data.object_id;
 
-				using GoCycleDbContext dbContext= new GoCycleDbContext();
+				using GoCycleDbContext dbContext = new GoCycleDbContext();
 
 				UserToken token = UserQueries.GetToken(dbContext, userId);
 				var requestHandler = new StravaApiRequestHandler(new StravaTokenHandler(token));
 
 				Activity a = await ActivityRequests.GetActivity(requestHandler, activityId);
 
-				List<Tuple<double, double>> polyline = PolylineDecoder.Decode(a.map.polyline);
+				
 				_logger.LogInformation("activity name: " + a.name);
 			}
 			return new OkResult();

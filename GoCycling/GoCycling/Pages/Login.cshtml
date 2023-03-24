@@ -6,10 +6,10 @@
 <script>
     if ("@Model.hasCode" === "False") {
         if("@Model.hostedLocally" === "True"){
-			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://localhost:7070/login&response_type=code&scope=activity:read_all");
+			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://localhost:7070/login&response_type=code&scope=activity:read");
 		}
 		else{
-			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://gocycling.azurewebsites.net/login&response_type=code&scope=activity:read_all");
+			window.location.replace("https://strava.com/oauth/authorize?client_id=91002&redirect_uri=https://gocycling.azurewebsites.net/login&response_type=code&scope=activity:read");
 		}
     }
 	else{
