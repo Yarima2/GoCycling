@@ -27,6 +27,7 @@ namespace GoCycling.Controllers
         {
 			try
 			{
+
 				StravaApiRequestHandler request = await StravaApiRequestHandler.FromAuthCode(authCode);
 				var athlete = await request.SendRequest<Athlete>(HttpMethod.Get, "athlete");
 
@@ -63,35 +64,29 @@ namespace GoCycling.Controllers
 					// redirect response value.
 				};
 
+				StravaToken token = request.tokenHandler.Token;
 
-
-				using GoCycleDbContext dbContext = new GoCycleDbContext();
-
-				User? user = UserQueries.GetUser(dbContext, athlete.id);
-
-				if (user == null)
+				var userToken = new UserToken
 				{
-					StravaToken token = request.tokenHandler.Token;
+					access_token = token.access_token,
+					expires_at = token.expires_at,
+					refresh_token = token.refresh_token,
+					token_type = token.token_type
+				};
 
-					var userToken = new UserToken
-					{
-						access_token= token.access_token,
-						expires_at=token.expires_at,
-						refresh_token=token.refresh_token,
-						token_type = token.token_type
-					};
+				using GoCyclingDbClient dbClient = new GoCyclingDbClient();
+				await dbClient.ConnectAsync();
 
-					List<Team> teams = TeamQueries.GetAllTeams(dbContext);
-					user = new User
-					{
-						Id = athlete.id,
-						Team = teams[(int)(new Random().NextDouble() * teams.Count())],
-						Token = userToken,
-					};
-					dbContext.UserTokens.Add(userToken);
-					dbContext.Users.Add(user);
-					dbContext.SaveChanges();
+				User? u = await UserQueries.GetUser(dbClient, athlete.id); 
+
+				await UserQueries.MergeUserSetToken(dbClient, athlete.id, athlete.GetName(), userToken);
+
+				if(u == null)
+				{
+					await UserQueries.AssignTeam(dbClient, athlete.id);
 				}
+
+				
 
 
 				await HttpContext.SignInAsync(

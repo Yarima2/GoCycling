@@ -13,5 +13,10 @@
 		public string sex { get; set; }
         public string profile_medium { get; set; }
         public string profile { get; set; }
+
+		public string GetName()
+		{
+			return firstname + " " + lastname;
+		}
 	}
 }

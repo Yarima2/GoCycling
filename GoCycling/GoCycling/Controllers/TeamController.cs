@@ -18,7 +18,6 @@ namespace GoCycling.Controllers
         [HttpGet]
         public int GetAllTeams()
         {
-            using GoCycleDbContext dbContext = new GoCycleDbContext();
             return 1;
         }
     }

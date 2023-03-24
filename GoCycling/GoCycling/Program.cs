@@ -2,9 +2,11 @@ using GoCycling;
 using GoCycling.Controllers;
 using GoCycling.Queries;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Neo4jClient;
 
 var builder = WebApplication.CreateBuilder(args);
-GoCycleDbContext.connString = builder.Configuration.GetConnectionString("DatabaseConnString");
+GoCyclingDbClient.adress = new Uri(builder.Configuration.GetConnectionString("neo4jUri"));
+GoCyclingDbClient.password = builder.Configuration.GetConnectionString("neo4jPassword");
 StravaTokenHandler.clientId = builder.Configuration.GetConnectionString("StravaClientId");
 StravaTokenHandler.clientSecret = builder.Configuration.GetConnectionString("StravaClientSecret");
 StravaWebhookController.verifyToken = builder.Configuration.GetConnectionString("StravaWebhookVerifyToken");

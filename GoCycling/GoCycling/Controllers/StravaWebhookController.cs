@@ -50,9 +50,9 @@ namespace GoCycling.Controllers
 				int userId = data.owner_id;
 				long activityId = data.object_id;
 
-				using GoCycleDbContext dbContext = new GoCycleDbContext();
+				using GoCyclingDbClient dbClient = new GoCyclingDbClient();
 
-				UserToken token = UserQueries.GetToken(dbContext, userId);
+				UserToken token = await UserQueries.GetToken(dbClient, userId);
 				var requestHandler = new StravaApiRequestHandler(new StravaTokenHandler(token));
 
 				Activity a = await ActivityRequests.GetActivity(requestHandler, activityId);

@@ -6,17 +6,18 @@ namespace GoCycling.Models
 {
     public class Tile
     {
-        [Key]
         public int X { get; set; }
-        [Key]
         public int Y { get; set; }
+        public int? LastConquerActivity { get; set; }
+        public bool Encircled { get; set; }
 
-        public virtual ICollection<TileConquer> Conquers { get; set; } = null!;
 
-        public Tile(int x, int y)
+        public Tile(int x, int y, int? lastConquerActivity = null, bool encircled = false)
         {
             X = x;
             Y = y;
+            LastConquerActivity = lastConquerActivity;
+            Encircled = encircled;
         }
 
     }

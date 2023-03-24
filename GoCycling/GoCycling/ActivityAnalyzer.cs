@@ -17,28 +17,18 @@ namespace GoCycling
 				visitedGridCells.Add(Grid.GetGridPos(coord));
 			}
 
-			using GoCycleDbContext dbContext = new GoCycleDbContext();
 
-			List<TileConquer> tileConquers = new List<TileConquer>();
 			foreach (var gridCoord in visitedGridCells)
 			{
-				Tile tile = dbContext.Tiles.Find(gridCoord.Item1, gridCoord.Item2);
+				Tile? tile = null;
 				if(tile == null) {
 					tile = new Tile(gridCoord.Item1, gridCoord.Item2);
-					dbContext.Tiles.Add(tile);
 				}
-				tileConquers.Add(new TileConquer
-				{
-					Tile = tile,
-					UserId = userId,
-					ActivityId = activity.Id,
-					Timestamp = activity.,
-					Encircled = false
-				});
+
+
+
 			}
 
-			dbContext.TileConquers.AddRange();
-			dbContext.SaveChanges();
 		}
 
 	}
