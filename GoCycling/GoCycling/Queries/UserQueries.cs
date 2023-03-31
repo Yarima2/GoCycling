@@ -1,6 +1,5 @@
 ﻿using GoCycling.Models;
 using Neo4jClient;
-using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace GoCycling.Queries
 {
@@ -8,55 +7,59 @@ namespace GoCycling.Queries
 	{
 
 
-		public static async Task<UserToken> GetToken(GraphClient dbClient, int userId)
+		public static async Task<UserToken> GetToken(IGraphClient dbClient, int userId)
 		{
 			var result = await dbClient.Cypher
 				.Match($"(:User {{id:{userId}}})-[:Issues]->(ut:UserToken)")
-				.Return((ut) => new { UserToken = ut.As<UserToken>() })
+				.Return((ut) => ut.As<UserToken>())
 				.ResultsAsync;
 
-			return result.First().UserToken;
+			return result.First();
 		}
 
-		public static async Task<Models.User?> GetUser(GraphClient dbClient, int userId)
+		public static async Task<Models.User?> GetUser(IGraphClient dbClient, int userId)
 		{
 			var result = await dbClient.Cypher
-				.Match($"(u:User {{id:{userId}}})")
-				.Return((u) => new { User = u.As<Models.User>() })
+				.Match($"(u:User {{Id:{userId}}})")
+				.Return((u) => u.As<User>())
 				.ResultsAsync;
 
 			if (!result.Any())
 			{
 				return null;
 			}
-			return result.First().User;
+			return result.First();
 		}
 
-		public static async Task MergeUserSetToken(GraphClient dbClient, int userId, string name, UserToken token)
+		public static async Task SetToken(IGraphClient dbClient, int userId, string name, UserToken token)
 		{
 
 			await dbClient.Cypher
-				.Match($"(:User {{id:{userId}}})-[i:Issues]->(ut:UserToken)")
+				.Match($"(u:User)-[i:Issues]->(ut:UserToken)")
+				.Where((User u) => u.Id == userId)
 				.Delete("i, ut")
 				.ExecuteWithoutResultsAsync();
 
 			await dbClient.Cypher
-				.Merge($"(:User {{id:{userId}, name: {name}}})-[:Issues]->(ut:UserToken)")
+				.Match($"(u:User {{Id:{userId}}})")
+				.Create($"(u)-[:Issues]->(ut:UserToken $token)")
+				.WithParam("token", token)
 				.ExecuteWithoutResultsAsync();
 		}
 
-		public static async Task AssignTeam(GoCyclingDbClient dbClient, int userId)
+		public static async Task CreateUser(IGraphClient dbClient, User user)
 		{
 			var results = await dbClient.Cypher
 				.Match("(t:Team)")
-				.Return((t) => new { Team = t.As<Team>() })
+				.Return(t => t.As<Team>())
 				.ResultsAsync;
 
-			var result = results.ElementAt(new Random().Next(results.Count()));
-			Team team = result.Team;
+			var team = results.ElementAt(new Random().Next(results.Count()));
 
 			await dbClient.Cypher
-				.Merge($"(:User {{id:{userId}}})-[:IsPartOf]->(:Team {{name: {team.Name}}})")
+				.Match($"(t:Team {{Name:\"{team.Name}\"}})")
+				.Create("(u:User $user)-[:IsPartOf]->(t)")
+				.WithParam("user", user)
 				.ExecuteWithoutResultsAsync();
 
 		}

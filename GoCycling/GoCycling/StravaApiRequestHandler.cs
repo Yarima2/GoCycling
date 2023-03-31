@@ -68,11 +68,11 @@ namespace GoCycling
 		{
 			Token = new StravaToken()
 			{
-				access_token = token.access_token,
-				expires_at = token.expires_at,
+				access_token = token.AccessToken,
+				expires_at = token.ExpiresAt,
 				expires_in = -1,
-				refresh_token = token.refresh_token,
-				token_type = token.token_type,
+				refresh_token = token.RefreshToken,
+				token_type = token.TokenType,
 				athlete = null,
 			};
 		}

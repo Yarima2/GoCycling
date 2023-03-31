@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
 using GoCycling.Models;
 using GoCycling.StravaApiRequests;
+using Neo4jClient;
 
 namespace GoCycling.Controllers
 {
@@ -16,10 +17,12 @@ namespace GoCycling.Controllers
     {
 
         private readonly ILogger<TeamController> _logger;
+		private readonly IGraphClient _graphClient;
 
-        public LoginController(ILogger<TeamController> logger)
+        public LoginController(ILogger<TeamController> logger, IGraphClient graphClient)
         {
             _logger = logger;
+			_graphClient = graphClient;
         }
 
         [HttpPost]
@@ -68,23 +71,28 @@ namespace GoCycling.Controllers
 
 				var userToken = new UserToken
 				{
-					access_token = token.access_token,
-					expires_at = token.expires_at,
-					refresh_token = token.refresh_token,
-					token_type = token.token_type
+					AccessToken = token.access_token,
+					ExpiresAt = token.expires_at,
+					RefreshToken = token.refresh_token,
+					TokenType = token.token_type
 				};
 
-				using GoCyclingDbClient dbClient = new GoCyclingDbClient();
-				await dbClient.ConnectAsync();
+				User? u = await UserQueries.GetUser(_graphClient, athlete.id);
 
-				User? u = await UserQueries.GetUser(dbClient, athlete.id); 
 
-				await UserQueries.MergeUserSetToken(dbClient, athlete.id, athlete.GetName(), userToken);
-
-				if(u == null)
+				if (u == null)
 				{
-					await UserQueries.AssignTeam(dbClient, athlete.id);
+					u = new User
+					{
+						Id = athlete.id,
+						Name = athlete.GetName()
+					};
+					await UserQueries.CreateUser(_graphClient, u);
 				}
+
+				await UserQueries.SetToken(_graphClient, athlete.id, athlete.GetName(), userToken);
+
+
 
 				
 

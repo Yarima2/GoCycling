@@ -34,6 +34,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
+var client = new BoltGraphClient(new Uri("bolt://localhost:7687"), "neo4j", "12345678");
+client.ConnectAsync();
+builder.Services.AddSingleton<IGraphClient>(client);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
