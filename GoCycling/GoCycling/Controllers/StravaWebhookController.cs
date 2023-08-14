@@ -57,7 +57,7 @@ namespace GoCycling.Controllers
 
 				Activity a = await ActivityRequests.GetActivity(requestHandler, activityId);
 
-				
+				ActivityAnalyzer.Analyze(a, userId);
 				_logger.LogInformation("activity name: " + a.name);
 			}
 			return new OkResult();

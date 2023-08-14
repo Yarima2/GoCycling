@@ -5,6 +5,7 @@
 		public long Id { get; set; }
 		public string name { get; set; }
 		public Map map { get; set; } = null!;
+		public DateTime start_date { get; set; }
 	}
 
 	public class Map

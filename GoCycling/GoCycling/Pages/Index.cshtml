@@ -35,11 +35,47 @@
 	<script>
 		mapboxgl.accessToken = 'pk.eyJ1IjoibWFudWVsLXByaW56IiwiYSI6ImNqNGF6MGR3OTA1d3UzM3FwNDJmMjRhd3YifQ.StEp4b_MJYSohkG2Ok67vA';
 		const map = new mapboxgl.Map({
-		container: 'map', // container ID
-		// Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+			container: 'map', // container ID
 			style: 'mapbox://styles/mapbox/dark-v11', // style URL
-		center: [-74.5, 40], // starting position [lng, lat]
-		zoom: 9 // starting zoom
+			center: [-74.5, 40], // starting position [lng, lat]
+			zoom: 9 // starting zoom
+		});
+
+		map.on('load', () => {
+			map.addSource('tile_conquers_visited', {
+				type: 'geojson',
+				// Use a URL for the value for the `data` property.
+				data: '/geojson/visited'
+			})
+
+			map.addSource('tile_conquers_encircled', {
+				type: 'geojson',
+				// Use a URL for the value for the `data` property.
+				data: '/geojson/encircled'
+			})
+
+			map.addLayer({
+				'id': 'fill_visited_tile_conquers',
+				'type': 'fill',
+				'source': 'tile_conquers_visited', // reference the data source
+				'layout': {},
+				'paint': {
+					'fill-color': '#008800', // green color fill
+					'fill-opacity': 0.5
+				}
+			});
+
+			map.addLayer({
+				'id': 'fill_visited_tile_conquers',
+				'type': 'fill',
+				'source': 'tile_conquers_encircled', // reference the data source
+				'layout': {},
+				'paint': {
+					'fill-color': '#0080ff', // blue color fill
+					'fill-opacity': 0.5
+				}
+			});
+		
 		});
 	</script>
 

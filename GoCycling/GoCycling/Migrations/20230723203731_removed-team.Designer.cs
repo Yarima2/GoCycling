@@ -3,6 +3,7 @@ using System;
 using GoCycling.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoCycling.Migrations
 {
     [DbContext(typeof(GoCycleDbContext))]
-    partial class GoCycleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230723203731_removed-team")]
+    partial class removedteam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,22 +24,10 @@ namespace GoCycling.Migrations
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
 
-            modelBuilder.Entity("GoCycling.Models.TileConquer", b =>
+            modelBuilder.Entity("GoCycling.Models.Tile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<long>("ActivityId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("Encircled")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("X")
@@ -46,6 +37,33 @@ namespace GoCycling.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.ToTable("Tiles");
+                });
+
+            modelBuilder.Entity("GoCycling.Models.TileConquer", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<long>("ActivityId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Encircled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TileId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TileId");
 
                     b.HasIndex("UserId");
 
@@ -95,11 +113,19 @@ namespace GoCycling.Migrations
 
             modelBuilder.Entity("GoCycling.Models.TileConquer", b =>
                 {
+                    b.HasOne("GoCycling.Models.Tile", "Tile")
+                        .WithMany("Conquers")
+                        .HasForeignKey("TileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GoCycling.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Tile");
 
                     b.Navigation("User");
                 });
@@ -113,6 +139,11 @@ namespace GoCycling.Migrations
                         .IsRequired();
 
                     b.Navigation("Token");
+                });
+
+            modelBuilder.Entity("GoCycling.Models.Tile", b =>
+                {
+                    b.Navigation("Conquers");
                 });
 #pragma warning restore 612, 618
         }

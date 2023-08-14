@@ -81,11 +81,9 @@ namespace GoCycling.Controllers
 						token_type = token.token_type
 					};
 
-					List<Team> teams = TeamQueries.GetAllTeams(dbContext);
 					user = new User
 					{
 						Id = athlete.id,
-						Team = teams[(int)(new Random().NextDouble() * teams.Count())],
 						Token = userToken,
 					};
 					dbContext.UserTokens.Add(userToken);

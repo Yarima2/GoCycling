@@ -17,7 +17,7 @@ namespace GoCycling.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,10 +44,10 @@ namespace GoCycling.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    tokentype = table.Column<string>(name: "token_type", type: "nvarchar(max)", nullable: false),
-                    accesstoken = table.Column<string>(name: "access_token", type: "nvarchar(max)", nullable: false),
+                    tokentype = table.Column<string>(name: "token_type", type: "text", nullable: false),
+                    accesstoken = table.Column<string>(name: "access_token", type: "text", nullable: false),
                     expiresat = table.Column<long>(name: "expires_at", type: "bigint", nullable: false),
-                    refreshtoken = table.Column<string>(name: "refresh_token", type: "nvarchar(max)", nullable: false)
+                    refreshtoken = table.Column<string>(name: "refresh_token", type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

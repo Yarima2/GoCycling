@@ -3,6 +3,7 @@ using System;
 using GoCycling.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoCycling.Migrations
 {
     [DbContext(typeof(GoCycleDbContext))]
-    partial class GoCycleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230813212218_fixed_tq_id")]
+    partial class fixedtqid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -3,6 +3,7 @@ using System;
 using GoCycling.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GoCycling.Migrations
 {
     [DbContext(typeof(GoCycleDbContext))]
-    partial class GoCycleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230813201648_refactored_db")]
+    partial class refactoreddb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,9 +26,8 @@ namespace GoCycling.Migrations
 
             modelBuilder.Entity("GoCycling.Models.TileConquer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
                     b.Property<long>("ActivityId")
                         .HasColumnType("INTEGER");

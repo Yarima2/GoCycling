@@ -29,5 +29,20 @@ namespace GoCycling.Queries
 				throw new Exception("User not found");
 			}
 		}
+
+
+		public static User? GetUserFromToken(GoCycleDbContext dbContext, string token)
+		{
+			UserToken? ut = dbContext.UserTokens
+							.Where(t => t.access_token == token)
+							.FirstOrDefault();
+
+			if (ut == null) return null;
+
+			return dbContext.Users
+							.Where(t => t.Token == ut)
+							.FirstOrDefault();
+		}
 	}
+
 }
