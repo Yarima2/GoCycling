@@ -64,7 +64,7 @@ namespace GoCycling.Controllers
 			{
 				return Unauthorized();
 			}
-			int userId = Int32.Parse(c.Value);
+			int userId = int.Parse(c.Value);
 
 			User? user = UserQueries.GetUser(dbContext, userId);
 			if (user == null)
@@ -74,7 +74,7 @@ namespace GoCycling.Controllers
 
 			List<TileConquer> conquers = TileConquerQueries.GetEncircledConquers(dbContext, user);
 			GeoJson geojson = GeoJson.Parse(conquers);
-			return new JsonResult(new object());
+			return new JsonResult(geojson);
 		}
 	}
 

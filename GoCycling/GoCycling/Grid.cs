@@ -16,12 +16,12 @@
 			return GetGridPos(coord.Item1, coord.Item2);
 		}
 
-		protected bool IsNeighbour(Tuple<double, double> coord1, Tuple<double, double> coord2)
+		public static bool IsNeighbour(Tuple<double, double> coord1, Tuple<double, double> coord2)
 		{
 			return IsNeighbour(GetGridPos(coord1), GetGridPos(coord2));
 		}
 
-		protected bool IsNeighbour(Tuple<int, int> gridPos1, Tuple<int, int> gidPos2)
+		public static bool IsNeighbour(Tuple<int, int> gridPos1, Tuple<int, int> gidPos2)
 		{
 			return Math.Abs(gridPos1.Item1 - gidPos2.Item1) <= 1 && Math.Abs(gridPos1.Item2 - gidPos2.Item2) <= 1;
 		}
