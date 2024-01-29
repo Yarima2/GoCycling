@@ -1,0 +1,15 @@
+VERSION 2.9
+UPDATED ON 09-08-2023
+01- Fixed Error while load Las with undefinded projection
+02- New EPSG Code Appear when Las File Set to Terrain Field
+03- Fixed  error while loading OSM files
+04- New API to convert from Row/Col <---> Lat/Lon
+05- Fixed Error appear in editor windows while generating Terrain Layers For Splatmaps.
+06- Added Support to tiled BandsTiff if 'Tiff' Format
+07- Fixed "Input string was not in a correct format " Appear when Load an OSM file
+08- Fixed Error appear when EASYROAD3 Installed
+09- Fixed Elevation Reader for Tiled Tiff INT and UTIN 32 BIT
+10- Fixed Roads + Building  y offset in very small terrain scale
+11- Fixed WEBGL Build Error
+12- 'Import ShapeFile into Unity Using QGIS'  Tutorial video Added  to the asset media
+13_ Fixed some warning messages
