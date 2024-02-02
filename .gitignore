@@ -85,3 +85,5 @@ profile.arm.json
 GoCycling/.vs
 *.db
 /target/
+*.hgt
+
