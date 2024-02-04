@@ -12,8 +12,7 @@ public class TerrainLoader : MonoBehaviour
     public Terrain terrain;
     const string FILE_PATH = "C:\\Users\\Anwender\\Downloads\\L32\\N47E009.hgt";
 
-    public int width = 256;
-    public int height = 256;
+    public int size = 256;
     public int heightmapResolution = 2049;
     public int depth = 20;
 
@@ -29,7 +28,7 @@ public class TerrainLoader : MonoBehaviour
     TerrainData GenerateTerrain()
     {
         TerrainData terrainData = terrain.terrainData;
-        terrainData.size = new Vector3(width, depth, height);
+        terrainData.size = new Vector3(size, depth, size);
         terrainData.heightmapResolution =heightmapResolution;
         terrainData.SetHeights(0, 0, GenerateHeights());
         return terrainData;
@@ -37,7 +36,7 @@ public class TerrainLoader : MonoBehaviour
 
     private float[,] GenerateHeights()
     {
-        float[,] heights = new float[width, height];
+        float[,] heights = new float[size, size];
         return LoadHeights();
         heights[0, 0] = 1;
         return heights;
@@ -47,13 +46,13 @@ public class TerrainLoader : MonoBehaviour
     {
         byte[] bytes = File.ReadAllBytes(FILE_PATH);
         int hgtResolution = (int)Mathf.Sqrt(bytes.Length / 2.0f);
-        float[,] heights = new float[width + 1, height + 1];
+        float[,] heights = new float[size + 1, size + 1];
         Debug.Log("hgtResolution: " + hgtResolution);
-        for(int x = 0; x <= width; x++)
+        for(int x = 0; x <= size; x++)
         {
-            for (int z = 0; z <= height; z++)
+            for (int z = 0; z <= size; z++)
             {
-                heights[width - x, z] = BinaryPrimitives.ReadInt16BigEndian(new ReadOnlySpan<byte>(bytes, (x * hgtResolution + z) * 2,  2)) / 9000f;
+                heights[size - x, z] = BinaryPrimitives.ReadInt16BigEndian(new ReadOnlySpan<byte>(bytes, (x * hgtResolution + z) * 2,  2)) / 9000f;
                 //heights[x, z] = BitConverter.ToInt16(bytes, (x * hgtResolution + z) * 2);
             }
         }
