@@ -1,4 +1,0 @@
-repository "GoCyclingUnity@manuel_prinz@cloud"
-  path "/"
-    br "/main"
-    co "/main"
